@@ -1,12 +1,13 @@
 export const site = {
   brand: 'Bin Suleman',
   brandSuffix: 'Real Estate & Builders',
-  phoneDisplay: '+92 42 111 277 999',
-  phoneDisplayShort: '(042) 111-277-999',
-  phoneHref: 'tel:+9242111277999',
+  /** Primary direct-call line (mobile), E.164 with '+'. */
+  phoneDisplay: '+92 300 9484188',
+  phoneDisplayShort: '(0300) 9484188',
+  phoneHref: 'tel:+923009484188',
   /** Real WhatsApp (mobile) number of the owner, E.164 without '+'. */
-  whatsappNumber: '923244459815',
-  whatsappDisplay: '+92 324 4459815',
+  whatsappNumber: '923009484188',
+  whatsappDisplay: '+92 300 9484188',
   get whatsappHref() {
     return 'https://wa.me/' + this.whatsappNumber;
   },
