@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en" style=""><head>
+﻿<!DOCTYPE html><html lang="en" style=""><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>Contact Us - Bin Suleman Real Estate &amp; Builders</title>
@@ -139,8 +139,8 @@ html.bsr-leaving.bsr-go #bsr-wipe{transform:scaleY(1);transition:transform .4s v
 <span class="material-symbols-outlined text-sm text-[#fed65b]">verified</span>
             OFFICIAL AUTHORIZED SALES PARTNER
           </span>
-<span class="hidden md:inline text-neutral-400">•</span>
-<span class="hidden md:inline text-neutral-300 font-medium truncate">DHA Phase 9 Prism &amp; Etihad Town Phase 4 • Pre-Launch Allotments Open</span>
+<span class="hidden md:inline text-neutral-400">â€¢</span>
+<span class="hidden md:inline text-neutral-300 font-medium truncate">DHA Phase 9 Prism &amp; Etihad Town Phase 4 â€¢ Pre-Launch Allotments Open</span>
 </div>
 </div>
 </div>
@@ -197,10 +197,10 @@ html.bsr-leaving.bsr-go #bsr-wipe{transform:scaleY(1);transition:transform .4s v
 <span class="text-lg font-bold text-[#131b2e]">Book Private Advisory Session</span>
 </div>
 <span class="text-[11px] uppercase px-3 py-1 rounded-full bg-[#ffe088] text-[#241a00] font-bold tracking-wide">
-              Sector A–R Plots
+              Sector Aâ€“R Plots
             </span>
 </div>
-<form class="flex flex-col gap-5" id="consultation-form" onsubmit="event.preventDefault(); submitBooking();">
+<form class="flex flex-col gap-5" id="consultation-form" onsubmit="event.preventDefault(); submitBooking();; bsrWaSubmit(this);">
 <!-- Full Name & Phone Number -->
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 <div class="flex flex-col gap-1.5">
@@ -260,14 +260,14 @@ html.bsr-leaving.bsr-go #bsr-wipe{transform:scaleY(1);transition:transform .4s v
 <label class="cursor-pointer">
 <input checked="" class="peer sr-only" name="budget" type="radio" value="1.5-3cr">
 <div class="p-2.5 rounded-xl bg-[#f2f3ff] text-center peer-checked:bg-[#0b1329] peer-checked:text-white transition-all hover:bg-neutral-200">
-<span class="text-xs font-bold block">1.5 – 3.0 Cr</span>
+<span class="text-xs font-bold block">1.5 â€“ 3.0 Cr</span>
 <span class="text-[10px] opacity-75">10M &amp; 1K Mid</span>
 </div>
 </label>
 <label class="cursor-pointer">
 <input class="peer sr-only" name="budget" type="radio" value="3-5cr">
 <div class="p-2.5 rounded-xl bg-[#f2f3ff] text-center peer-checked:bg-[#0b1329] peer-checked:text-white transition-all hover:bg-neutral-200">
-<span class="text-xs font-bold block">3.0 – 5.0 Cr</span>
+<span class="text-xs font-bold block">3.0 â€“ 5.0 Cr</span>
 <span class="text-[10px] opacity-75">1K Corner/Park</span>
 </div>
 </label>
@@ -364,8 +364,8 @@ html.bsr-leaving.bsr-go #bsr-wipe{transform:scaleY(1);transition:transform .4s v
 <div class="flex flex-col w-full">
 <span class="text-sm font-bold text-[#131b2e]">Executive Office Timings</span>
 <div class="text-xs text-neutral-600 font-body grid grid-cols-2 gap-2 mt-1">
-<span class="">Mon – Sat:</span>
-<span class="font-semibold text-[#131b2e]">10:00 AM – 8:00 PM</span>
+<span class="">Mon â€“ Sat:</span>
+<span class="font-semibold text-[#131b2e]">10:00 AM â€“ 8:00 PM</span>
 <span class="">Sunday:</span>
 <span class="font-semibold text-[#131b2e]">By Prior Appointment</span>
 </div>
@@ -446,7 +446,7 @@ html.bsr-leaving.bsr-go #bsr-wipe{transform:scaleY(1);transition:transform .4s v
 </div>
 <h3 class="text-lg font-bold text-[#131b2e]">Target Plot Site Escort</h3>
 <p class="text-xs sm:text-sm text-neutral-600 font-body leading-relaxed">
-              Depart directly from our office in our private consultation vehicle to inspect the ground-level status, electrical cabling depth, sewerage grid, and sunlight orientation in Sector A–R.
+              Depart directly from our office in our private consultation vehicle to inspect the ground-level status, electrical cabling depth, sewerage grid, and sunlight orientation in Sector Aâ€“R.
             </p>
 </div>
 <!-- Step 3 -->
@@ -473,7 +473,7 @@ html.bsr-leaving.bsr-go #bsr-wipe{transform:scaleY(1);transition:transform .4s v
 <div class="flex items-center gap-2 flex-wrap">
 <h3 class="text-lg sm:text-xl font-bold text-white">Overseas Pakistani Concierge Desk</h3>
 <span class="px-2 py-0.5 rounded-md bg-[#fed65b] text-[#0b1329] text-[10px] font-extrabold uppercase tracking-wider">
-                  UK • UAE • USA • CANADA
+                  UK â€¢ UAE â€¢ USA â€¢ CANADA
                 </span>
 </div>
 <p class="text-xs sm:text-sm text-neutral-300 font-body max-w-2xl mt-1.5 leading-relaxed">
@@ -722,5 +722,39 @@ html.bsr-leaving.bsr-go #bsr-wipe{transform:scaleY(1);transition:transform .4s v
   window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(frame);}},{passive:true});
   frame();
 }catch(e){}});
+</script>
+<script>
+/* BSR: route every form submission to WhatsApp +92 300 9484188 */
+function bsrWaSubmit(f) {
+  try {
+    var m = 'Hello Bin Suleman Real Estate & Builders, I submitted a form on your website (' + document.title + ').\n\n';
+    var els = f.querySelectorAll('input,select,textarea');
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i], t = el.type;
+      if (t === 'hidden' || t === 'submit' || t === 'button') continue;
+      if ((t === 'checkbox' || t === 'radio') && !el.checked) continue;
+      var v = (el.value || '').trim();
+      if (!v) continue;
+      var k = el.name || '';
+      if (!k) {
+        var p = el.parentElement, n = 0;
+        while (p && !k && n < 3) {
+          var l = p.querySelector('label');
+          if (l) k = l.textContent || '';
+          p = p.parentElement;
+          n++;
+        }
+      }
+      if (!k) k = el.getAttribute('placeholder') || '';
+      if (!k) k = (el.tagName === 'SELECT' ? 'Selection' : 'Detail');
+      k = String(k).replace(/\s+/g, ' ').replace(/\s*\*+$/, '').trim();
+      m += k + ': ' + v + '\n';
+    }
+    var u = 'https://wa.me/923009484188?text=' + encodeURIComponent(m);
+    var w = null;
+    try { w = window.open(u, '_blank'); } catch (e) {}
+    if (!w) { location.href = u; }
+  } catch (e) {}
+}
 </script>
 </body></html>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { site } from '@/content/site';
+import { waLink } from '@/lib/whatsapp';
 
 const FB = 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z';
 const YT = 'M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z';
@@ -37,12 +38,23 @@ export default function Footer() {
               </p>
             </div>
           </div>
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center px-space-md py-space-sm rounded-full bg-gradient-to-r from-[#d4af37] to-[#e6ca65] text-[#0b1329] font-label-md text-label-md font-bold shadow-md hover:scale-105 transition-transform"
-          >
-            Schedule Consultation
-          </Link>
+          <div className="flex flex-col sm:items-end gap-3">
+            <Link
+              href="/contact"
+              className="inline-flex items-center justify-center px-space-md py-space-sm rounded-full bg-gradient-to-r from-[#d4af37] to-[#e6ca65] text-[#0b1329] font-label-md text-label-md font-bold shadow-md hover:scale-105 transition-transform"
+            >
+              Schedule Consultation
+            </Link>
+            <a
+              href={waLink('Hello Bin Suleman Real Estate & Builders, I would like to request a consultation.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-space-md py-space-sm rounded-full bg-[#25D366] text-[#062b16] font-label-md text-label-md font-bold shadow-md hover:scale-105 transition-transform"
+            >
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current" aria-hidden="true"><path d={WA} /></svg>
+              WhatsApp {site.phoneDisplay}
+            </a>
+          </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-space-xl py-space-xl">
           {cols.map((col) => (

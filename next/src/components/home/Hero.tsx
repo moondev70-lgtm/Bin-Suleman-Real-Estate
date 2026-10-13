@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import Icon from '@/components/Icon';
 import { site } from '@/content/site';
+import { waLink } from '@/lib/whatsapp';
 
 const stats = [
   { value: '15+', label: 'Years Prism Advisory' },
@@ -57,11 +58,15 @@ export default function Hero() {
               Plan Office Visit
             </Link>
             <a
-              href={site.phoneHref}
+              href={waLink('Hello! I would like to speak with a Bin Suleman advisor about DHA Phase 9 Prism.')}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-label-lg text-label-lg font-semibold hover:bg-white/20 transition-colors min-h-[44px]"
             >
-              <Icon name="call" className="text-xl text-secondary-container" />
-              Speak with an Advisor
+              <Icon name="chat" className="text-xl text-secondary-container" />
+              <span>
+                Speak with an Advisor<span className="hidden sm:inline"> · {site.phoneDisplay}</span>
+              </span>
             </a>
           </div>
         </div>

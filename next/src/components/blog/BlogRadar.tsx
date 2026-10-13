@@ -1,5 +1,6 @@
 import Icon from '@/components/Icon';
 import { site } from '@/content/site';
+import { waLink } from '@/lib/whatsapp';
 
 const groups = [
   { label: 'Ready / Early Possession', items: [['Sec A', '1 Kanal • 2 Kanal', '95% Complete'], ['Sec B', '1 Kanal • Ring Rd', '90% Complete'], ['Sec C', '1 Kanal • Boulevard', '88% Complete'], ['Sec D', '1 Kanal • Golf Facing', '82% Complete']] },
@@ -60,8 +61,8 @@ export default function BlogRadar() {
             <a href={site.whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#25D366] text-[#062b16] text-xs font-bold hover:scale-105 transition-transform">
               <Icon name="chat" className="text-base" /> Schedule WhatsApp Consultation
             </a>
-            <a href={site.phoneHref} className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-slate-100 hover:bg-secondary-fixed text-on-surface text-xs font-bold transition-colors">
-              <Icon name="call" className="text-base text-secondary" /> Call Direct Hotline: {site.phoneDisplayShort}
+            <a href={waLink('Hello! I would like to reach the Bin Suleman direct hotline.')} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-slate-100 hover:bg-secondary-fixed text-on-surface text-xs font-bold transition-colors">
+              <Icon name="chat" className="text-base text-secondary" /> Direct Hotline: {site.phoneDisplay}
             </a>
           </div>
         </div>

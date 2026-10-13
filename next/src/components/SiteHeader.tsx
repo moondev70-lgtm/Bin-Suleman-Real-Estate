@@ -159,7 +159,7 @@ export default function SiteHeader() {
             </span>
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#fed65b] whitespace-nowrap">
               <span className="bsr-sheen">Bin Suleman</span>{' '}
-              <span className="text-slate-200 font-medium">{site.brandSuffix}</span>
+              <span className="hidden sm:inline text-slate-200 font-medium">{site.brandSuffix}</span>
             </span>
           </Link>
           <a
@@ -169,8 +169,7 @@ export default function SiteHeader() {
             <span id="bsr-callicon" className="material-symbols-outlined text-sm sm:text-base">
               call
             </span>
-            <span className="hidden sm:inline">{site.phoneDisplay}</span>
-            <span className="sm:hidden">Call</span>
+            <span className="whitespace-nowrap">{site.phoneDisplay}</span>
           </a>
         </div>
         <span ref={progRef} id="bsr-progress" aria-hidden="true" />

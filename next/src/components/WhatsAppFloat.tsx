@@ -8,7 +8,8 @@ export default function WhatsAppFloat() {
       href={site.whatsappHref}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Chat on WhatsApp"
+      title={`Chat on WhatsApp ${site.whatsappDisplay}`}
+      aria-label={`Chat with Bin Suleman Real Estate & Builders on WhatsApp ${site.whatsappDisplay}`}
       className="fixed bottom-5 right-5 z-[60] flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-2xl hover:scale-105 transition-transform"
     >
       <svg viewBox="0 0 24 24" className="w-7 h-7 fill-current" aria-hidden="true">

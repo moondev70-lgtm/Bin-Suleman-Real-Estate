@@ -1,5 +1,6 @@
 import Icon from '@/components/Icon';
 import { site } from '@/content/site';
+import { waLink } from '@/lib/whatsapp';
 
 const expect = [
   { n: '01', icon: 'map', title: 'Unreleased Blueprint Access', desc: 'Examine large-format master town-planning maps, official contour levels, upcoming ring road ramps, and private investor inventory sheets before plots hit general marketing.' },
@@ -30,9 +31,9 @@ export default function ContactSections() {
                 <Icon name="forum" className="text-2xl text-secondary" />
                 <div><p className="text-sm font-bold text-on-surface">Instant WhatsApp Desk</p><p className="text-xs text-on-surface-variant">{site.whatsappDisplay}</p></div>
               </a>
-              <a href={site.phoneHref} className="flex items-center gap-3 p-4 rounded-2xl bg-surface-container-low hover:bg-secondary-fixed/40 transition-colors">
-                <Icon name="call" className="text-2xl text-secondary" />
-                <div><p className="text-sm font-bold text-on-surface">Hotline UAN Direct</p><p className="text-xs text-on-surface-variant">{site.phoneDisplay}</p></div>
+              <a href={waLink('Hello! I would like to reach the Bin Suleman direct response line.')} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-4 rounded-2xl bg-surface-container-low hover:bg-secondary-fixed/40 transition-colors">
+                <Icon name="chat" className="text-2xl text-secondary" />
+                <div><p className="text-sm font-bold text-on-surface">Direct Line (Call / WhatsApp)</p><p className="text-xs text-on-surface-variant">{site.phoneDisplay}</p></div>
               </a>
             </div>
             <div className="rounded-3xl bg-[#0a101d] text-white p-6 flex flex-col gap-3">

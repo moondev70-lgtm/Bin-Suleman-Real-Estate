@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Icon from '@/components/Icon';
+import { site } from '@/content/site';
+import { openWhatsApp, waLink } from '@/lib/whatsapp';
 
 const focus = ['Residential Plot (5M, 10M, 1K, 2K)', 'Commercial Zone & Boulevard Strip', 'Turnkey Luxury Villa Construction', 'Sell My DHA Prism File / Plot', 'General Portfolio Realignment'];
 const sectors = ['Open to Recommended S-Tier Block', 'Sector A & B (Possession Ready)', 'Sector C & D (Ring Road Strategic)', 'Sector J, K, L (Central Boulevard)', 'Sector Q & R (High Growth Vector)', 'Main Commercial Avenue Parcels'];
@@ -10,6 +12,7 @@ const modes = [['store', 'Office Visit & Map Review'], ['chat', 'WhatsApp Dossie
 
 export default function ContactForm() {
   const [sent, setSent] = useState(false);
+  const [waHref, setWaHref] = useState('');
   const [budget, setBudget] = useState(0);
   const [mode, setMode] = useState(0);
   const cls = 'rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-on-surface placeholder:text-slate-400 focus:border-[#d4af37] focus:outline-none focus:ring-4 focus:ring-[#d4af37]/15 w-full';
@@ -41,23 +44,59 @@ export default function ContactForm() {
     <div className="lg:col-span-7">
       <div className="rounded-3xl bg-white border border-slate-200/80 shadow-xl p-6 sm:p-8">
         {sent ? (
-          <div className="h-full min-h-[320px] flex flex-col items-center justify-center gap-3 text-center">
+          <div className="h-full min-h-[320px] flex flex-col items-center justify-center gap-4 text-center">
             <Icon name="check_circle" className="text-5xl text-secondary" />
             <p className="text-sm sm:text-base text-on-surface-variant max-w-md">
-              Consultation request registered. Our Principal Prism Advisor will contact you within 2 business hours.
+              Your consultation details are prepared for WhatsApp{' '}
+              <strong className="text-on-surface">{site.phoneDisplay}</strong>. Send the pre-filled message and our
+              Principal Prism Advisor will reply within 2 business hours.
             </p>
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#25D366] text-[#062b16] font-label-lg text-label-lg font-bold shadow-xl hover:scale-[1.02] transition-transform min-h-[44px]"
+            >
+              <Icon name="chat" className="text-lg" /> Open WhatsApp · {site.phoneDisplay}
+            </a>
+            <a
+              href={site.phoneHref}
+              className="text-xs font-semibold text-on-surface-variant hover:text-secondary transition-colors"
+            >
+              or call {site.phoneDisplay}
+            </a>
           </div>
         ) : (
-          <form className="flex flex-col gap-4" onSubmit={(e) => { e.preventDefault(); setSent(true); }}>
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const d = new FormData(e.currentTarget);
+              const msg = [
+                'Hello Bin Suleman Real Estate & Builders, I would like to schedule a consultation from your website.',
+                '',
+                `Name: ${String(d.get('name') ?? '')}`,
+                `Phone / WhatsApp: ${String(d.get('phone') ?? '')}`,
+                `Property Focus: ${String(d.get('focus') ?? '')}`,
+                `Sector / Block: ${String(d.get('sector') ?? '')}`,
+                `Budget: ${budgets[budget][0]} (${budgets[budget][1]})`,
+                `Preferred Discussion: ${modes[mode][1]}`,
+                `Notes: ${String(d.get('notes') ?? '') || '-'}`,
+              ].join('\n');
+              setWaHref(waLink(msg));
+              setSent(true);
+              openWhatsApp(msg);
+            }}
+          >
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input required placeholder="Full Name *" className={cls} />
-              <input required placeholder="Contact Phone / WhatsApp *" className={cls} />
+              <input required name="name" placeholder="Full Name *" className={cls} />
+              <input required name="phone" placeholder="Contact Phone / WhatsApp *" className={cls} />
             </div>
-            <select defaultValue="" required className={cls}>
+            <select name="focus" defaultValue="" required className={cls}>
               <option value="" disabled>Primary Property Focus</option>
               {focus.map((o) => <option key={o} value={o}>{o}</option>)}
             </select>
-            <select defaultValue="" required className={cls}>
+            <select name="sector" defaultValue="" required className={cls}>
               <option value="" disabled>Target Sector / Block</option>
               {sectors.map((o) => <option key={o} value={o}>{o}</option>)}
             </select>
@@ -82,14 +121,14 @@ export default function ContactForm() {
                 ))}
               </div>
             </div>
-            <textarea rows={3} placeholder="Plot Specifics or Construction Notes (Optional)" className={cls} />
+            <textarea name="notes" rows={3} placeholder="Plot Specifics or Construction Notes (Optional)" className={cls} />
             <p className="text-[11px] text-on-surface-variant flex items-start gap-2">
               <Icon name="shield" className="text-secondary text-base shrink-0 mt-0.5" />
               Institutional Integrity: No cold spam or persistent marketing calls. Only straightforward plot figures
               and verifiable DHA documentation.
             </p>
             <button type="submit" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-[#d4af37] to-[#e6ca65] text-[#0b1329] font-label-lg text-label-lg font-bold shadow-xl hover:scale-[1.02] transition-transform min-h-[44px]">
-              Schedule Consultation <Icon name="arrow_forward" className="text-lg" />
+              Schedule Consultation on WhatsApp <Icon name="chat" className="text-lg" />
             </button>
           </form>
         )}
