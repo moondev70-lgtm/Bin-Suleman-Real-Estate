@@ -6,7 +6,6 @@ New-Item -ItemType Directory -Force -Path "$root\assets\images" | Out-Null
 New-Item -ItemType Directory -Force -Path "$root\assets\video" | Out-Null
 
 # 1. Copy real brand assets
-Copy-Item "$parent\BSR.png" "$root\assets\images\bsr-logo.png" -Force
 Copy-Item "$parent\BSR NAME.png" "$root\assets\images\bsr-name.png" -Force
 Copy-Item "$parent\a2c40840cf95dde8784132e3897449b8.mp4" "$root\assets\video\promo.mp4" -Force
 
@@ -42,3 +41,7 @@ foreach ($u in $urls) {
 }
 $map | ConvertTo-Json -Depth 2 | Set-Content "$root\assets\image-map.json"
 Write-Host "Downloaded $($map.Count) of $($urls.Count)"
+
+# 3. Regenerate every brand logo file (bsr-logo.png x2 + favicon.ico x3) from
+#    the golden emblem — see make-brand-logo.ps1 for details.
+& "$root\make-brand-logo.ps1"
