@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import AdminGuard from '@/components/admin/AdminGuard';
 import ListingForm, { type FormValues } from '@/components/admin/ListingForm';
+import BlogForm, { EMPTY_BLOG, blogValuesFromRow } from '@/components/admin/BlogForm';
 import { getSupabase } from '@/lib/supabase/client';
 import type { ListingRow, PhotoRow } from '@/lib/listings';
+import type { BlogPostRow } from '@/lib/blogs';
 
 const blankForm: FormValues = {
   ref: '',
@@ -41,17 +43,21 @@ const toFormValues = (row: ListingRow): FormValues => ({
 });
 
 function Editor() {
-  // Read ?id= from the URL after mount (no dynamic route possible under
-  // output:'export', and window.location avoids useSearchParams/Suspense).
+  // Read ?id= and ?type= from the URL after mount (no dynamic route possible
+  // under output:'export', and window.location avoids useSearchParams/Suspense).
   const [id, setId] = useState<string | null>(null);
+  const [isBlog, setIsBlog] = useState(false);
   const [row, setRow] = useState<ListingRow | null>(null);
   const [photos, setPhotos] = useState<PhotoRow[]>([]);
+  const [blogRow, setBlogRow] = useState<BlogPostRow | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const listingId = params.get('id');
+    const blog = params.get('type') === 'blog';
+    setIsBlog(blog);
     setId(listingId);
     if (!listingId) {
       setLoading(false);
@@ -64,6 +70,20 @@ function Editor() {
       return;
     }
     (async () => {
+      if (blog) {
+        const { data, error: blogErr } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('id', listingId)
+          .single();
+        if (blogErr) {
+          setError(blogErr.message);
+        } else {
+          setBlogRow(data as BlogPostRow);
+        }
+        setLoading(false);
+        return;
+      }
       const { data, error: rowErr } = await supabase
         .from('listings')
         .select('*')
@@ -101,11 +121,22 @@ function Editor() {
     );
   }
 
-  if (id && !row) {
+  if (id && (isBlog ? !blogRow : !row)) {
     return (
       <div className="rounded-2xl bg-white/5 border border-white/10 px-5 py-6 text-sm text-slate-400">
-        Listing not found.
+        {isBlog ? 'Post not found.' : 'Listing not found.'}
       </div>
+    );
+  }
+
+  if (isBlog) {
+    return (
+      <BlogForm
+        key={id ?? 'new-blog'}
+        postId={id}
+        initial={blogRow ? blogValuesFromRow(blogRow) : EMPTY_BLOG}
+        initialCover={blogRow?.cover_path ?? null}
+      />
     );
   }
 
