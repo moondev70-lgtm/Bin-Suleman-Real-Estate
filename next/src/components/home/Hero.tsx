@@ -1,83 +1,83 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import Icon from '@/components/Icon';
 import { site } from '@/content/site';
-import { waLink } from '@/lib/whatsapp';
-
-const stats = [
-  { value: '15+', label: 'Years Prism Advisory' },
-  { value: '1,200+', label: 'Verified Investors' },
-  { value: '100%', label: 'NDC Clean Title' },
-  { value: 'PKR 48B+', label: 'Managed Volume' },
-];
 
 export default function Hero() {
   return (
-    <section className="relative w-full overflow-hidden bg-[#0a101d] text-white pt-28 sm:pt-36 lg:pt-40 pb-16 sm:pb-24 border-b border-secondary/20">
-      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
-        <img
-          src="/images/img-22-ab6axucpsm4v.jpg"
-          alt="DHA Phase 9 Prism Monument Gate"
-          className="w-full h-full object-cover object-center opacity-30 md:opacity-40 filter brightness-90"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a101d] via-[#0a101d]/75 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a101d] via-[#0a101d]/85 to-transparent" />
+    <section className="relative w-full min-h-screen min-h-[100svh] min-h-[100dvh] overflow-hidden bg-[#080d1a] text-white flex flex-col items-center justify-center">
+      {/* Soft radial glow behind the logo */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-[#fed65b]/10 rounded-full blur-[120px] sm:w-[50vw] sm:h-[50vw]" />
       </div>
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col justify-between">
-        <div className="max-w-3xl flex flex-col gap-4 sm:gap-6 mt-2 sm:mt-6">
-          <div className="flex items-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-secondary-container/40 shadow-inner">
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-container opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary-container" />
-              </span>
-              <Icon name="verified" className="text-secondary-container text-sm" />
-              <span className="text-[11px] sm:text-xs text-secondary-container uppercase tracking-wider font-bold">
-                Authorized Direct Real Estate
-              </span>
-              <span className="text-[11px] sm:text-xs text-slate-200 font-medium">• DHA Phase 9 Prism</span>
-            </div>
-          </div>
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight sm:leading-[1.15]">
-            Buying property is a big decision.
-            <br />
-            <span className="bg-gradient-to-r from-secondary-fixed via-secondary-container to-secondary-fixed-dim bg-clip-text text-transparent">
-              Let&apos;s make it an informed one.
-            </span>
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg text-slate-200 max-w-2xl leading-relaxed font-normal">
-            Explore DHA Phase 9 Prism with an institutional advisory team that helps you analyze genuine plot
-            values, inspect on-ground contours, and execute secure official transfers.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-gradient-to-r from-[#d4af37] to-[#e6ca65] text-[#0b1329] font-label-lg text-label-lg font-bold shadow-xl hover:scale-105 transition-transform min-h-[44px]"
-            >
-              <Icon name="calendar_month" className="text-xl" />
-              Plan Office Visit
-            </Link>
-            <a
-              href={waLink('Hello! I would like to speak with a Bin Suleman advisor about DHA Phase 9 Prism.')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-label-lg text-label-lg font-semibold hover:bg-white/20 transition-colors min-h-[44px]"
-            >
-              <Icon name="chat" className="text-xl text-secondary-container" />
-              <span>
-                Speak with an Advisor<span className="hidden sm:inline"> · {site.phoneDisplay}</span>
-              </span>
-            </a>
-          </div>
+
+      {/* Architectural arched doorway watermark — CSS only, low-opacity gold */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none select-none"
+        style={{
+          backgroundImage: `
+            radial-gradient(
+              circle at 50% 30px,
+              transparent 20px,
+              rgba(254, 214, 91, 0.045) 21px,
+              rgba(254, 214, 91, 0.045) 23px,
+              transparent 24px
+            ),
+            linear-gradient(to right, rgba(254, 214, 91, 0.035) 1px, transparent 1px)
+          `,
+          backgroundSize: '140px 240px',
+        }}
+      />
+
+      {/* Thin gold frame inset 12-20px with L-shaped corner brackets */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        <div className="absolute inset-3 sm:inset-4 md:inset-5 border border-[#fed65b]/35">
+          {/* L-shaped corner brackets */}
+          <span className="absolute -top-[1px] -left-[1px] w-7 h-7 border-t border-l border-[#fed65b]" />
+          <span className="absolute -top-[1px] -right-[1px] w-7 h-7 border-t border-r border-[#fed65b]" />
+          <span className="absolute -bottom-[1px] -left-[1px] w-7 h-7 border-b border-l border-[#fed65b]" />
+          <span className="absolute -bottom-[1px] -right-[1px] w-7 h-7 border-b border-r border-[#fed65b]" />
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-10 sm:mt-16">
-          {stats.map((s) => (
-            <div key={s.label} className="rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 px-4 py-4 sm:px-5 sm:py-5">
-              <p className="text-2xl sm:text-3xl font-extrabold text-secondary-container font-[Manrope]">{s.value}</p>
-              <p className="text-[11px] sm:text-xs text-slate-300 uppercase tracking-wider font-semibold mt-1">{s.label}</p>
-            </div>
-          ))}
+      </div>
+
+      {/* Hero content */}
+      <div className="relative z-20 flex flex-col items-center text-center px-4 sm:px-6 pt-[100px] sm:pt-[120px] pb-[96px]">
+        {/* Logo */}
+        <div className="relative mb-6 sm:mb-8">
+          <div className="absolute inset-0 bg-[#fed65b]/15 blur-[48px] rounded-full scale-90 pointer-events-none" />
+          <img
+            src={site.logo}
+            alt="Bin Suleman Real Estate & Builders Emblem"
+            className="relative w-[90px] sm:w-[110px] md:w-[130px] lg:w-[150px] h-auto object-contain mx-auto drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
+          />
         </div>
+
+        {/* Tagline */}
+        <p className="text-xs sm:text-sm font-semibold tracking-[0.26em] uppercase text-[#fed65b]/90 mb-5 sm:mb-7">
+          WE BUILD YOUR DREAMS.
+        </p>
+
+        {/* H1 */}
+        <h1
+          className="font-extrabold tracking-tight text-white leading-tight mb-7 sm:mb-9"
+          style={{
+            fontFamily: 'Manrope, sans-serif',
+            fontSize: 'clamp(2.25rem, 6vw, 4.5rem)',
+            letterSpacing: '0.02em',
+            wordSpacing: '0.1em',
+          }}
+        >
+          BIN SULEMAN
+          <br />
+          REAL ESTATE
+        </h1>
+
+        {/* Gold gradient button */}
+        <Link
+          href="/listings"
+          className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-[#FED65B] to-[#c9a43a] text-[#0b1329] font-bold uppercase tracking-[0.08em] shadow-xl shadow-[#d4af37]/30 hover:scale-105 hover:shadow-[#d4af37]/50 transition-all duration-300 min-h-[44px]"
+        >
+          EXPLORE LUXURY LISTINGS
+        </Link>
       </div>
     </section>
   );
