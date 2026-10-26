@@ -6,7 +6,6 @@ import {
   listings as staticListings,
   phase5Listings as staticPhase5,
   formatPKR,
-  scheduleOf,
 } from '@/content/listings';
 import { site } from '@/content/site';
 import { useListings } from '@/hooks/useListings';
@@ -29,9 +28,42 @@ function CardPhotos({ photos, alt }: { photos: string[]; alt: string }) {
   );
 }
 
+/** Phase filter pill button. */
+function PhaseFilterButton({ value, label, active, onClick }: { value: string; label: string; active: boolean; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={active}
+      className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide transition-all ${
+        active
+          ? 'bg-[#e07b0c] text-white shadow-[0_0_0_1px_rgba(224,123,12,0.3)]'
+          : 'border border-white/25 bg-[#0f1937] text-slate-300 hover:bg-[#16213f] hover:text-white focus:outline-none focus:border-[#fed65b]'
+      }`}
+    >
+      {label}
+    </button>
+  );
+}
+
+/** Sort toggle button (Newest / Oldest). */
+function SortButton({ value, active, onClick, children }: { value: string; active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-pressed={active}
+      className={`px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide transition-all ${
+        active
+          ? 'bg-[#e07b0c] text-white shadow-[0_0_0_1px_rgba(224,123,12,0.3)]'
+          : 'border border-white/25 bg-[#0f1937] text-slate-300 hover:bg-[#16213f] hover:text-white focus:outline-none focus:border-[#fed65b]'
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
 /** One pricing-style plot card (mirrors the design mock). */
 function ListingCard({ listing, onOpen }: { listing: PublicListing & { demand: number }; onOpen: (e?: React.MouseEvent<HTMLElement>) => void }) {
-  const { downPayment, monthlyInstallment, ballot, balloon, possession } = scheduleOf(listing.demand);
   const pkr = (n: number) => `PKR ${formatPKR(n)}`;
 
   return (
@@ -75,43 +107,7 @@ function ListingCard({ listing, onOpen }: { listing: PublicListing & { demand: n
         </div>
       </div>
 
-      {/* Down payment / monthly installment box */}
-      <div className="mt-5 rounded-2xl bg-[#fdf7ea] border border-[#f3e2c0] grid grid-cols-2 divide-x divide-[#f0e2c6]">
-        <div className="p-4">
-          <span className="block font-label-caps text-label-caps uppercase text-slate-500 leading-relaxed">
-            Down Payment (20%)
-          </span>
-          <span className="block mt-2 font-headline-sm text-headline-sm font-bold text-[#e07b0c]">
-            {pkr(downPayment)}
-          </span>
-        </div>
-        <div className="p-4">
-          <span className="block font-label-caps text-label-caps uppercase text-slate-500 leading-relaxed">
-            Monthly Installment
-          </span>
-          <span className="block mt-2 font-headline-sm text-headline-sm font-bold text-slate-900">
-            {pkr(monthlyInstallment)}
-          </span>
-          <span className="block font-body-sm text-body-sm text-slate-400">(1%)</span>
-        </div>
-      </div>
-
       {/* Schedule rows */}
-      <div className="mt-5 pt-5 border-t border-slate-200 flex flex-col gap-3 flex-1">
-        <div className="flex items-start justify-between gap-4">
-          <span className="font-body-md text-body-md text-slate-500">Ballot Payment (10%):</span>
-          <span className="font-label-lg text-label-lg font-bold text-slate-900 text-right">{pkr(ballot)}</span>
-        </div>
-        <div className="flex items-start justify-between gap-4">
-          <span className="font-body-md text-body-md text-slate-500">4 Balloon Payments (5%):</span>
-          <span className="font-label-lg text-label-lg font-bold text-slate-900 text-right">{pkr(balloon)} ea</span>
-        </div>
-        <div className="flex items-start justify-between gap-4">
-          <span className="font-body-md text-body-md text-slate-500">Possession (20%):</span>
-          <span className="font-label-lg text-label-lg font-bold text-slate-900 text-right">{pkr(possession)}</span>
-        </div>
-      </div>
-
       <a
         href={`https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(
           `I'm interested in the ${listing.ref} plot, DHA Phase 9 Prism. Please share details.`
@@ -237,6 +233,7 @@ const fallbackPhase5: any[] = staticPhase5.map((l, i) => ({
 export default function ListingsSection() {
   const { listings: liveListings } = useListings();
   const [query, setQuery] = useState('');
+  const [phaseFilter, setPhaseFilter] = useState<'all' | 'phase8' | 'prism9' | 'phase9'>('all');
   const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
   const [modalRef, setModalRef] = useState<string | null>(null);
   const [clickedCard, setClickedCard] = useState<HTMLElement | null>(null);
@@ -292,8 +289,8 @@ export default function ListingsSection() {
       }
     }
   }, [modalRef]);
-  const prism = base.filter((l) => l.collection === 'prism9' && matches(l)).sort(bySort);
-  const phase5 = base.filter((l) => l.collection === 'phase5' && matches(l)).sort(bySort);
+  const prism = base.filter((l) => l.collection === 'prism9' && matches(l) && (phaseFilter === 'all' || phaseFilter === 'prism9')).sort(bySort);
+  const phase5 = base.filter((l) => l.collection === 'phase5' && matches(l) && phaseFilter === 'all').sort(bySort);
   const totalMatches = prism.length + phase5.length;
   const searching = query.trim() !== '';
 
@@ -318,19 +315,52 @@ export default function ListingsSection() {
             />
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-white/25 text-slate-300 text-xs font-bold uppercase tracking-wide">
-              <span className="material-symbols-outlined text-base" aria-hidden="true">filter_alt</span>
-              Filters
-            </span>
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as 'newest' | 'oldest')}
-              aria-label="Sort listings"
-              className="px-4 py-2.5 rounded-xl border border-white/25 bg-[#0f1937] text-slate-200 text-xs font-bold uppercase tracking-wide focus:border-[#fed65b] focus:outline-none"
-            >
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-            </select>
+            {/* Phase filter buttons */}
+            <div className="flex flex-wrap gap-2">
+              <PhaseFilterButton
+                value="all"
+                label="All"
+                active={phaseFilter === 'all'}
+                onClick={() => setPhaseFilter('all')}
+              />
+              <PhaseFilterButton
+                value="phase8"
+                label="DHA Phase 8"
+                active={phaseFilter === 'phase8'}
+                onClick={() => setPhaseFilter('phase8')}
+              />
+              <PhaseFilterButton
+                value="prism9"
+                label="Prism 9"
+                active={phaseFilter === 'prism9'}
+                onClick={() => setPhaseFilter('prism9')}
+              />
+              <PhaseFilterButton
+                value="phase9"
+                label="DHA Phase 9"
+                active={phaseFilter === 'phase9'}
+                onClick={() => setPhaseFilter('phase9')}
+              />
+            </div>
+
+            {/* Sort buttons */}
+            <div className="flex gap-2">
+              <SortButton
+                value="newest"
+                active={sort === 'newest'}
+                onClick={() => setSort('newest')}
+              >
+                Newest
+              </SortButton>
+              <SortButton
+                value="oldest"
+                active={sort === 'oldest'}
+                onClick={() => setSort('oldest')}
+              >
+                Oldest
+              </SortButton>
+            </div>
+
             <span className="text-sm text-slate-400">
               {totalMatches} listing{totalMatches === 1 ? '' : 's'}
             </span>
@@ -365,9 +395,8 @@ export default function ListingsSection() {
           </h2>
           <p className="font-body-md text-body-md text-slate-300 mt-space-sm">
             All active listings currently on our desk &mdash; every card shows the plot reference, the date the
-            demand was recorded, and the full schedule of payments &mdash; 20% down payment, 1% monthly
-            installment, 10% ballot, four 5% balloon payments and 20% on possession. Tap the WhatsApp button on
-            any plot to reach us directly with a pre-filled enquiry.
+            demand was recorded, and the owner's asking price. Tap the WhatsApp button on any plot to reach us
+            directly with a pre-filled enquiry.
           </p>
         </div>
 

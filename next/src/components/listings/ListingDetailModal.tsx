@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { site } from '@/content/site';
-import { scheduleOf, formatPKR } from '@/content/listings';
+import { formatPKR } from '@/content/listings';
 import { LISTING_FEATURES } from '@/lib/listingFeatures';
 import type { PublicListing } from '@/lib/listings';
 
@@ -22,7 +22,6 @@ export default function ListingDetailModal({
   const prevFocus = useRef<HTMLElement | null>(null);
 
   const photos = listing.photos ?? [];
-  const { downPayment, monthlyInstallment, ballot } = scheduleOf(listing.demand ?? 0);
   const priceText = listing.demand === null ? 'Price on Request' : `PKR ${formatPKR(listing.demand)}`;
   const msg = `Inquiry regarding Plot ${listing.ref} (${listing.title}), ${priceText}`;
   const waUrl = `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(msg)}`;
@@ -113,21 +112,6 @@ export default function ListingDetailModal({
               )}
             </>
           )}
-        </div>
-
-        <div className="mt-5 rounded-2xl bg-[#fdf7ea] border border-[#f3e2c0] grid grid-cols-2 divide-x divide-[#f0e2c6]">
-          <div className="p-4">
-            <span className="block font-label-caps text-label-caps uppercase text-slate-500">Down Payment (20%)</span>
-            <span className="block mt-2 font-headline-sm text-headline-sm font-extrabold text-[#e07b0c]">PKR {formatPKR(downPayment)}</span>
-          </div>
-          <div className="p-4">
-            <span className="block font-label-caps text-label-caps uppercase text-slate-500">Monthly Installment (1%)</span>
-            <span className="block mt-2 font-headline-sm text-headline-sm font-extrabold text-[#e07b0c]">PKR {formatPKR(monthlyInstallment)}</span>
-          </div>
-        </div>
-        <div className="mt-3 rounded-2xl bg-[#fdf7ea] border border-[#f3e2c0] p-4">
-          <span className="block font-label-caps text-label-caps uppercase text-slate-500">Ballot (10%)</span>
-          <span className="block mt-2 font-headline-sm text-headline-sm font-extrabold text-[#e07b0c]">PKR {formatPKR(ballot)}</span>
         </div>
 
         {listing.details && listing.details.length > 0 && (
