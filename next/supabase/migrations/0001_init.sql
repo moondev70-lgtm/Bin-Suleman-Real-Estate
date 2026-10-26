@@ -31,7 +31,6 @@ create table if not exists public.listings (
   subtitle    text not null default '',     -- 'Direct plot'
   category    text not null default 'residential plot',
   collection  text not null default 'prism9'
-              check (collection in ('prism9','phase5')),
   location    text not null default 'DHA Phase 9 Prism, Lahore',
   demand      bigint check (demand is null or demand > 0),  -- null = On Request
   demand_date date,                         -- displayed as 'DD Mon YYYY'

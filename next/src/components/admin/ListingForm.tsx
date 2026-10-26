@@ -231,6 +231,11 @@ export default function ListingForm({
       setBusy(false);
       return;
     }
+    if (!payload.collection) {
+      setError('Section is required — pick Prism 9, Phase 5, or type a custom section.');
+      setBusy(false);
+      return;
+    }
     if (!payload.block) {
       setError('Block is required — pick one from the dropdown or choose Custom…');
       setBusy(false);

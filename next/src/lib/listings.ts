@@ -1,7 +1,7 @@
 import { formatDbDate } from '@/lib/format';
 
 /** Section of the listings page a row belongs to. */
-export type Collection = 'prism9' | 'phase5';
+export type Collection = string;
 
 /** Raw `public.listings` row as returned by Supabase. */
 export type ListingRow = {
@@ -72,7 +72,7 @@ export const rowToListing = (row: ListingRow, photos: string[] = []): PublicList
   final: row.is_final,
   featured: row.featured,
   photos,
-  collection: row.collection === 'phase5' ? 'phase5' : 'prism9',
+  collection: row.collection,
   features: Array.isArray(row.features) ? row.features.filter((x): x is string => typeof x === 'string') : [],
   details: Array.isArray(row.details)
     ? row.details
