@@ -130,16 +130,22 @@ function SelectWithCustom({
   onChange: (v: string) => void;
   placeholder: string;
 }) {
-  const isCustom = value !== '' && !options.includes(value);
+  const [customValue, setCustomValue] = useState<string>('');
+  const isCustom = customValue !== '' || (value !== '' && !options.includes(value));
+  const displayValue = customValue || value;
   return (
     <div>
       <label className={labelCls}>{label}</label>
       <select
         className={cls}
-        value={isCustom ? '__custom__' : value}
+        value={isCustom ? '__custom__' : options.includes(value) ? value : ''}
         onChange={(e) => {
-          if (e.target.value === '__custom__') onChange('');
-          else onChange(e.target.value);
+          if (e.target.value === '__custom__') {
+            setCustomValue('');
+          } else {
+            setCustomValue('');
+            onChange(e.target.value);
+          }
         }}
       >
         <option value="" disabled>
@@ -155,8 +161,11 @@ function SelectWithCustom({
       {isCustom && (
         <input
           className={`${cls} mt-2`}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
+          value={displayValue}
+          onChange={(e) => {
+            setCustomValue(e.target.value);
+            onChange(e.target.value);
+          }}
           placeholder="Type a custom value"
         />
       )}
@@ -294,7 +303,23 @@ export default function ListingForm({
             options={SECTIONS}
             value={values.collection as (typeof SECTIONS)[number]['value']}
             onChange={(v) => set('collection', v)}
+            allowCustom={{
+              isCustom: !SECTIONS.some((s) => s.value === values.collection),
+              onCustom: () => set('collection', ''),
+            }}
           />
+          {!SECTIONS.some((s) => s.value === values.collection) && (
+            <div className="col-span-full">
+              <label className={labelCls} htmlFor="f-section-custom">Custom section</label>
+              <input
+                id="f-section-custom"
+                className={cls}
+                placeholder="Type a custom section name"
+                value={values.collection}
+                onChange={(e) => set('collection', e.target.value)}
+              />
+            </div>
+          )}
           <Segmented
             label="Category *"
             options={CATEGORIES}
