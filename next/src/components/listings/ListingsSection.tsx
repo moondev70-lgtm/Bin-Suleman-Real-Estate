@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import {
   listings as staticListings,
@@ -12,6 +12,7 @@ import { site } from '@/content/site';
 import { useListings } from '@/hooks/useListings';
 import { parseDisplayDate } from '@/lib/format';
 import type { PublicListing } from '@/lib/listings';
+import ListingDetailModal from '@/components/listings/ListingDetailModal';
 
 /** Photo header at the top of a card (renders nothing when there are no photos). */
 function CardPhotos({ photos, alt }: { photos: string[]; alt: string }) {
@@ -29,16 +30,20 @@ function CardPhotos({ photos, alt }: { photos: string[]; alt: string }) {
 }
 
 /** One pricing-style plot card (mirrors the design mock). */
-function ListingCard({ listing }: { listing: PublicListing & { demand: number } }) {
+function ListingCard({ listing, onOpen }: { listing: PublicListing & { demand: number }; onOpen: (e?: React.MouseEvent<HTMLElement>) => void }) {
   const { downPayment, monthlyInstallment, ballot, balloon, possession } = scheduleOf(listing.demand);
   const pkr = (n: number) => `PKR ${formatPKR(n)}`;
 
   return (
     <article
+      onClick={onOpen}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen(); } }}
+      tabIndex={0}
+      role="button"
       className={
         listing.featured
-          ? 'flex flex-col bg-white rounded-3xl border-2 border-[#e07b0c] p-6 sm:p-7 shadow-[0_24px_50px_-24px_rgba(0,0,0,0.6)]'
-          : 'flex flex-col bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-[0_24px_50px_-28px_rgba(0,0,0,0.5)]'
+          ? 'flex flex-col bg-white rounded-3xl border-2 border-[#e07b0c] p-6 sm:p-7 shadow-[0_24px_50px_-24px_rgba(0,0,0,0.6)] cursor-pointer'
+          : 'flex flex-col bg-white rounded-3xl border border-slate-200 p-6 sm:p-7 shadow-[0_24px_50px_-28px_rgba(0,0,0,0.5)] cursor-pointer'
       }
     >
       <CardPhotos photos={listing.photos} alt={listing.title} />
@@ -113,6 +118,7 @@ function ListingCard({ listing }: { listing: PublicListing & { demand: number } 
         )}`}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
         className="mt-7 inline-flex items-center justify-center gap-2 w-full px-6 py-4 rounded-xl bg-[#25D366] text-[#062b16] font-label-lg text-label-lg uppercase font-bold tracking-wide hover:bg-[#1ebe57] active:scale-[0.99] transition-all"
       >
         <span className="material-symbols-outlined text-xl" aria-hidden="true">chat</span>
@@ -179,6 +185,7 @@ function RequestCard({ listing, tag }: { listing: PublicListing; tag: string }) 
         href={`https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(context)}`}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
         className="mt-7 inline-flex items-center justify-center gap-2 w-full px-6 py-4 rounded-xl bg-[#25D366] text-[#062b16] font-label-lg text-label-lg uppercase font-bold tracking-wide hover:bg-[#1ebe57] active:scale-[0.99] transition-all"
       >
         <span className="material-symbols-outlined text-xl" aria-hidden="true">chat</span>
@@ -192,7 +199,7 @@ function RequestCard({ listing, tag }: { listing: PublicListing; tag: string }) 
  * Static fallback — rendered until Supabase responds (and whenever Supabase
  * is unreachable), so the page always looks identical to the current design.
  * ------------------------------------------------------------------------- */
-const fallbackPrism: PublicListing[] = staticListings.map((l, i) => ({
+const fallbackPrism: any[] = staticListings.map((l, i) => ({
   id: `static-prism-${i}`,
   ref: l.ref,
   block: l.block,
@@ -207,7 +214,7 @@ const fallbackPrism: PublicListing[] = staticListings.map((l, i) => ({
   collection: 'prism9',
 }));
 
-const fallbackPhase5: PublicListing[] = staticPhase5.map((l, i) => ({
+const fallbackPhase5: any[] = staticPhase5.map((l, i) => ({
   id: `static-phase5-${i}`,
   ref: l.ref,
   block: l.block,
@@ -231,6 +238,8 @@ export default function ListingsSection() {
   const { listings: liveListings } = useListings();
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
+  const [modalRef, setModalRef] = useState<string | null>(null);
+  const [clickedCard, setClickedCard] = useState<HTMLElement | null>(null);
 
   /** Case-insensitive match across every field a visitor would search. */
   const matches = (l: PublicListing): boolean => {
@@ -254,6 +263,35 @@ export default function ListingsSection() {
     sort === 'newest' ? b.created_at.localeCompare(a.created_at) : a.created_at.localeCompare(b.created_at);
 
   const base = liveListings ?? [...fallbackPrism, ...fallbackPhase5];
+  const modalListing = modalRef ? base.find((l) => l.ref === modalRef) ?? null : null;
+
+  // Deep link via URL hash
+  useEffect(() => {
+    const openFromHash = () => {
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash) setModalRef(hash);
+    };
+    openFromHash();
+    const onHash = () => {
+      const hash = window.location.hash.replace(/^#/, '');
+      if (!hash) setModalRef(null);
+      else setModalRef(hash);
+    };
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  useEffect(() => {
+    if (modalRef) {
+      if (window.location.hash.replace(/^#/, '') !== modalRef) {
+        window.history.replaceState(null, '', `#${modalRef}`);
+      }
+    } else {
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
+    }
+  }, [modalRef]);
   const prism = base.filter((l) => l.collection === 'prism9' && matches(l)).sort(bySort);
   const phase5 = base.filter((l) => l.collection === 'phase5' && matches(l)).sort(bySort);
   const totalMatches = prism.length + phase5.length;
@@ -336,7 +374,7 @@ export default function ListingsSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 sm:gap-6 mt-space-lg items-start">
           {prism.map((listing) =>
             priced(listing) ? (
-              <ListingCard key={listing.id} listing={listing} />
+              <ListingCard key={listing.id} listing={listing} onOpen={(e) => { setClickedCard(e!.currentTarget as HTMLElement); setModalRef(listing.ref); }} />
             ) : (
               <RequestCard key={listing.id} listing={listing} tag="DHA Phase 9 Prism" />
             )
@@ -379,8 +417,15 @@ export default function ListingsSection() {
         </div>
       </section>
       )}
+      {modalListing && (
+        <ListingDetailModal listing={modalListing} onClose={() => { setModalRef(null); setClickedCard(null); }} returnTo={clickedCard} />
+      )}
     </>
   );
 }
+
+
+
+
 
 

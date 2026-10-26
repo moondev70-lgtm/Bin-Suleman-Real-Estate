@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { getSupabase } from '@/lib/supabase/client';
 import type { PhotoRow } from '@/lib/listings';
+import { LISTING_FEATURES } from '@/lib/listingFeatures';
 import PhotoUploader, { type PendingPhoto } from '@/components/admin/PhotoUploader';
 
 export type FormValues = {
@@ -23,6 +24,10 @@ export type FormValues = {
   published: boolean;
   sort_order: number;
   description: string;
+  /** Ticked plot highlights. */
+  features: string[];
+  /** Manual label/value details shown in the listing modal. */
+  details: { label: string; value: string }[];
 };
 
 const cls =
@@ -51,6 +56,14 @@ const CATEGORIES = [
 /** Known blocks; "Custom…" reveals a free-typing input. */
 const BLOCK_OPTIONS = ['A Block', 'F Block', 'Q Block', 'L Block', 'M Block'];
 const LOCATION_OPTIONS = ['DHA Phase 9 Prism, Lahore', 'DHA Phase 5, Lahore'];
+
+/** Pre-filled detail rows users can quick-add. */
+const QUICK_DETAILS = [
+  { label: 'Plot Size', value: '500 Sq. Yards (1 Kanal)' },
+  { label: 'Possession', value: 'Immediate Possession' },
+  { label: 'Category', value: 'Residential Plot' },
+  { label: 'Transfer', value: 'Direct Owner / 100% Clear' },
+];
 
 const segBtn = (active: boolean) =>
   `px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wide border transition-all ${
@@ -198,6 +211,10 @@ export default function ListingForm({
       published: values.published,
       sort_order: Number.isFinite(values.sort_order) ? values.sort_order : 0,
       description: values.description,
+      features: values.features,
+      details: values.details
+        .map((d) => ({ label: d.label.trim(), value: d.value.trim() }))
+        .filter((d) => d.label !== '' || d.value !== ''),
     };
 
     if (!payload.ref) {
@@ -425,6 +442,128 @@ export default function ListingForm({
           <label className={labelCls} htmlFor="f-desc">Internal Description</label>
           <textarea id="f-desc" rows={3} className={cls} placeholder="Notes (not shown on cards)"
             value={values.description} onChange={(e) => set('description', e.target.value)} />
+        </div>
+      </section>
+
+      {/* Plot Highlights & Verified Features — checkbox grid */}
+      <section className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 sm:p-5 flex flex-col gap-4">
+        <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+          <span className="material-symbols-outlined text-base text-[#d4af37]" aria-hidden="true">feature</span>
+          Plot Highlights & Verified Features
+        </h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+          {LISTING_FEATURES.map((f) => {
+            const active = values.features.includes(f.key);
+            return (
+              <button
+                key={f.key}
+                type="button"
+                role="checkbox"
+                aria-checked={active}
+                onClick={() =>
+                  set('features', active
+                    ? values.features.filter((k) => k !== f.key)
+                    : [...values.features, f.key])
+                }
+                className={`flex flex-col items-center gap-1.5 rounded-xl border py-3 text-xs font-medium transition-all ${
+                  active
+                    ? 'bg-[#0b1329] text-[#fed65b] border-[#0b1329] shadow-sm'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-[#d4af37] hover:text-[#d4af37]'
+                }`}
+              >
+                <span className="material-symbols-outlined text-xs" aria-hidden="true">{f.icon}</span>
+                {f.label}
+              </button>
+            );
+          })}
+          <button
+            type="button"
+            className="flex flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-slate-300 bg-white py-3 text-xs text-slate-400 hover:border-[#d4af37] hover:text-[#d4af37] transition-colors"
+            onClick={() => {
+              const input = window.prompt('Type a new feature key');
+              if (!input) return;
+              const key = input.trim().toLowerCase().replace(/\s+/g, '_');
+              const label = input.trim();
+              if (!key || values.features.includes(key)) return;
+              set('features', [...values.features, key]);
+            }}
+          >
+            <span className="material-symbols-outlined text-xs" aria-hidden="true">add</span>
+            + Add Custom
+          </button>
+        </div>
+        <p className="text-xs text-slate-400">
+          Selected features appear as verified badges on listing cards and in the detail modal.
+        </p>
+      </section>
+
+      {/* Listing Details — repeatable label/value rows */}
+      <section className="rounded-2xl border border-slate-200 bg-slate-50/60 p-4 sm:p-5 flex flex-col gap-4">
+        <h3 className="text-sm font-extrabold uppercase tracking-wider text-slate-700 flex items-center gap-2">
+          <span className="material-symbols-outlined text-base text-[#d4af37]" aria-hidden="true">description</span>
+          Listing Details
+        </h3>
+        <p className="text-xs text-slate-400">
+          Label/value rows shown in the listing detail modal (e.g. Plot Size, Possession). Empty rows are not saved.
+        </p>
+        <div className="space-y-2">
+          {values.details.map((d, i) => (
+            <div key={i} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 items-end">
+              <input
+                id={`f-detail-label-${i}`}
+                className={cls}
+                placeholder="Label"
+                value={d.label}
+                onChange={(e) =>
+                  set('details', values.details.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))
+                }
+              />
+              <input
+                id={`f-detail-value-${i}`}
+                className={cls}
+                placeholder="Value"
+                value={d.value}
+                onChange={(e) =>
+                  set('details', values.details.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))
+                }
+              />
+              <button
+                type="button"
+                aria-label="Remove detail row"
+                onClick={() =>
+                  set('details', values.details.filter((_, j) => j !== i))
+                }
+                className="rounded-xl border border-slate-200 bg-white text-slate-600 px-3 py-3 text-xs hover:bg-slate-50 transition-colors"
+              >
+                <span className="material-symbols-outlined" aria-hidden="true">delete</span>
+              </button>
+            </div>
+          ))}
+          <div className="flex items-end gap-2">
+            <button
+              type="button"
+              className="rounded-xl border border-slate-200 bg-white text-slate-600 px-3 py-3 text-xs flex items-center gap-1 hover:bg-slate-50 transition-colors"
+              onClick={() => set('details', [...values.details, { label: '', value: '' }])}
+            >
+              <span className="material-symbols-outlined" aria-hidden="true">add</span>
+              Add Row
+            </button>
+            <div className="flex-1" />
+            {QUICK_DETAILS.map((qd) => (
+              <button
+                key={qd.label}
+                type="button"
+                className="rounded-xl border border-[#d4af37]/40 bg-white text-[#d4af37] px-3 py-3 text-xs hover:bg-[#d4af37] hover:text-[#0b1329] transition-colors"
+                onClick={() => {
+                  const exists = values.details.some((d) => d.label === qd.label);
+                  if (exists) return;
+                  set('details', [...values.details, { label: qd.label, value: qd.value }]);
+                }}
+              >
+                {qd.label}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 

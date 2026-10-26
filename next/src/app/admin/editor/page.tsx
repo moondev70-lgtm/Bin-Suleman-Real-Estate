@@ -23,6 +23,8 @@ const blankForm: FormValues = {
   published: true,
   sort_order: 0,
   description: '',
+  features: [],
+  details: [],
 };
 
 const toFormValues = (row: ListingRow): FormValues => ({
@@ -40,6 +42,12 @@ const toFormValues = (row: ListingRow): FormValues => ({
   published: row.published,
   sort_order: row.sort_order,
   description: row.description ?? '',
+  features: Array.isArray(row.features) ? row.features.filter((x): x is string => typeof x === 'string') : [],
+  details: Array.isArray(row.details)
+    ? row.details
+        .filter((d): d is { label: string; value: string } => !!d && typeof d === 'object')
+        .map((d) => ({ label: String((d as any).label ?? ''), value: String((d as any).value ?? '') }))
+    : [],
 });
 
 function Editor() {

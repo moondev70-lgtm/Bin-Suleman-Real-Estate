@@ -18,6 +18,8 @@ export type ListingRow = {
   is_final: boolean;
   featured: boolean;
   description: string | null;
+  features: string[] | null;
+  details: { label: string; value: string }[] | null;
   published: boolean;
   sort_order: number;
   created_at: string;
@@ -53,6 +55,8 @@ export type PublicListing = {
   featured: boolean;
   photos: string[];
   collection: Collection;
+  features: string[];
+  details: { label: string; value: string }[];
 };
 
 /** Map a DB row + its public photo URLs to the card presentation shape. */
@@ -69,4 +73,10 @@ export const rowToListing = (row: ListingRow, photos: string[] = []): PublicList
   featured: row.featured,
   photos,
   collection: row.collection === 'phase5' ? 'phase5' : 'prism9',
+  features: Array.isArray(row.features) ? row.features.filter((x): x is string => typeof x === 'string') : [],
+  details: Array.isArray(row.details)
+    ? row.details
+        .filter((d): d is { label: string; value: string } => !!d && typeof d === 'object')
+        .map((d) => ({ label: String((d as any).label ?? ''), value: String((d as any).value ?? '') }))
+    : [],
 });
