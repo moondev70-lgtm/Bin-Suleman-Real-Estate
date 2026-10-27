@@ -107,6 +107,8 @@ function ListingCard({ listing, onOpen }: { listing: PublicListing & { demand: n
         </div>
       </div>
 
+      <AmenityList features={listing.features} />
+
       {/* Schedule rows */}
       <a
         href={`https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(
@@ -176,6 +178,7 @@ function RequestCard({ listing, tag }: { listing: PublicListing; tag: string }) 
           Contact us for the current demand and payment schedule.
         </span>
       </div>
+<AmenityList features={listing.features} />
 
       <a
         href={`https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(context)}`}
