@@ -12,6 +12,7 @@ import { useListings } from '@/hooks/useListings';
 import { parseDisplayDate } from '@/lib/format';
 import type { PublicListing } from '@/lib/listings';
 import ListingDetailModal from '@/components/listings/ListingDetailModal';
+import { AmenityList } from '@/components/listings/AmenityList';
 
 /** Photo header at the top of a card (renders nothing when there are no photos). */
 function CardPhotos({ photos, alt }: { photos: string[]; alt: string }) {
