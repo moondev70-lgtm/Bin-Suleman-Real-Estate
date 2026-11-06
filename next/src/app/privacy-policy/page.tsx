@@ -12,7 +12,7 @@ export default function PrivacyPolicyPage() {
           <h1 className="font-display-xl text-4xl sm:text-5xl mb-6 tracking-tight">
             Privacy Policy
           </h1>
-          <p className="mb-6">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric })}</p>
+          <p className="mb-6">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })} </p>
           <h2 className="font-headline-lg text-headline-lg mb-4">Introduction</h2>
           <p className="mb-6">
             At Bin Suleman Real Estate & Builders ('we', 'our', or 'us'), we are committed to protecting your privacy. This privacy policy explains how we collect, use, and safeguard your personal information when you visit our website at <code>binsuleman.com</code> or interact with our services.
