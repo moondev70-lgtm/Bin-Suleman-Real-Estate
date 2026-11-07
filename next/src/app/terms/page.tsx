@@ -96,7 +96,7 @@ export default function TermsPage() {
             </p>
           </div>
         </div>
-      </main>
+      </div>
     </main>
   );
 }
