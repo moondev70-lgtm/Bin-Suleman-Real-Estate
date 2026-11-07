@@ -80,8 +80,8 @@ export default function Footer() {
             <span className="font-body-sm text-body-sm">🇵🇰 Pakistan (English)</span>
           </div>
           <div className="flex flex-wrap items-center gap-space-md font-label-md text-label-md">
-            {['Privacy Policy', 'Investor Charter', 'Sales Terms', 'Terms of Service', 'Careers'].map((l) => (
-              <a key={l} href={l === 'Privacy Policy' ? '/privacy-policy' : l === 'Terms of Service' ? '/terms' : '#'} className="hover:text-on-surface transition-colors cursor-pointer">{l}</a>
+            {['Privacy Policy', 'Terms of Service'].map((l) => (
+              <a key={l} href={l === 'Privacy Policy' ? '/privacy-policy' : '/terms'} className="hover:text-on-surface transition-colors cursor-pointer">{l}</a>
             ))}
           </div>
         </div>
