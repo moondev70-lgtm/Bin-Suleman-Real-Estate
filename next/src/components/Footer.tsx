@@ -68,7 +68,7 @@ export default function Footer() {
             </div>
           ))}
         </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md border-t border-surface-container-high pt-space-md">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center gap-space-md border-t border-surface-container-high pt-space-md">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-3">
               {socials.map((s) => (
