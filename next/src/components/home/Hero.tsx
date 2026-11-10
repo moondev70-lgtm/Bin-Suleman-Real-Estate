@@ -4,7 +4,7 @@ import { site } from '@/content/site';
 
 export default function Hero() {
   return (
-    <section className="relative w-full min-h-screen min-h-[100svh] min-h-[100dvh] overflow-hidden bg-[#080d1a] text-white flex flex-col items-center justify-center">
+    <section className="relative w-full min-h-screen overflow-hidden bg-[#080d1a] text-white flex flex-col items-center justify-center">
       {/* Soft radial glow behind the logo */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-[#fed65b]/10 rounded-full blur-[120px] sm:w-[50vw] sm:h-[50vw]" />
@@ -40,7 +40,7 @@ export default function Hero() {
       </div>
 
       {/* Hero content */}
-      <div className="relative z-20 flex flex-col items-center text-center px-4 sm:px-6 pt-[100px] sm:pt-[120px] pb-[96px]">
+      <div className="relative z-20 flex flex-col items-center text-center px-4 sm:px-6 pt-10 sm:pt-12 pb-16">
         {/* Logo */}
         <div className="relative mb-6 sm:mb-8">
           <div className="absolute inset-0 bg-[#fed65b]/15 blur-[48px] rounded-full scale-90 pointer-events-none" />
