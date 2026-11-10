@@ -61,8 +61,9 @@ export default function Footer() {
             <div key={col.title} className="flex flex-col gap-space-sm">
               <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface pb-space-xs">{col.title}</h3>
               {col.links.map((l) => {
-                // Connect footer links to relevant pages
-                const href = l === 'Market Magazine' ? '/blog' :
+                // Connect footer links to relevant pages or external URLs
+                const href = l === 'Etihad Town Phase 4' ? 'https://etihad-town-p4-six.vercel.app/' :
+                             l === 'Market Magazine' ? '/blog' :
                              l === 'Commercial & Corporate' ? '/services' :
                              l === 'Residential Plots' ? '/listings' :
                              l === 'Commercial Investment' ? '/services' :
