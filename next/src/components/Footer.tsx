@@ -60,11 +60,26 @@ export default function Footer() {
           {cols.map((col) => (
             <div key={col.title} className="flex flex-col gap-space-sm">
               <h3 className="font-headline-sm text-headline-sm font-bold text-on-surface pb-space-xs">{col.title}</h3>
-              {col.links.map((l) => (
-                <a key={l} className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer" href="#">
-                  {l}
-                </a>
-              ))}
+              {col.links.map((l) => {
+                // Connect footer links to relevant pages
+                const href = l === 'Market Magazine' ? '/blog' :
+                             l === 'Commercial & Corporate' ? '/services' :
+                             l === 'Residential Plots' ? '/listings' :
+                             l === 'Commercial Investment' ? '/services' :
+                             l === 'Turnkey Villa Construction' ? '/services' :
+                             l === 'Get Assistance' ? '/contact' :
+                             l === 'Contact Advisory' ? '/contact' :
+                             '#';
+                return (
+                  <a
+                    key={l}
+                    className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+                    href={href}
+                  >
+                    {l}
+                  </a>
+                );
+              })}
             </div>
           ))}
         </div>
